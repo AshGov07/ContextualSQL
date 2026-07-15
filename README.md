@@ -9,7 +9,6 @@ The application features a sleek glassmorphic web interface and a robust FastAPI
 ## 🛠️ Core Technology Stack
 
 ### Backend Services
-
 - **Framework**: FastAPI (Python 3.8+)
 - **SQL Driver & ORM**: `pyodbc` & SQLAlchemy (connecting to Microsoft SQL Server)
 - **Vector Database**: ChromaDB (for schema indexing and semantic lookup)
@@ -18,7 +17,6 @@ The application features a sleek glassmorphic web interface and a robust FastAPI
 - **SQL Sanitizer**: `sqlparse` (for command inspection and threat protection)
 
 ### Frontend UI
-
 - **Structure/Layout**: HTML5 & CSS3 with custom variables (sleek dark sidebar and responsive main container)
 - **CSS Framework**: Bootstrap 5 (with Bootstrap Icons)
 - **Typography**: Google Fonts (Inter)
@@ -86,6 +84,28 @@ text-to-sql-ai-agent-main/
 ## ⚙️ Detailed System Flow & RAG Pipeline
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '#1e293b',
+    'primaryTextColor': '#ffffff',
+    'primaryBorderColor': '#38bdf8',
+    'lineColor': '#64748b',
+    'secondaryColor': '#0f172a',
+    'tertiaryColor': '#1e293b',
+    'actorBkg': '#0f172a',
+    'actorBorder': '#38bdf8',
+    'actorTextColor': '#ffffff',
+    'signalColor': '#38bdf8',
+    'signalTextColor': '#e2e8f0',
+    'labelBoxBkgColor': '#1e293b',
+    'labelBoxBorderColor': '#475569',
+    'labelTextColor': '#ffffff',
+    'loopBkgColor': '#1e293b',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff'
+  }
+}}%%
 sequenceDiagram
     autonumber
     actor User as "User Frontend"
@@ -131,18 +151,15 @@ sequenceDiagram
 
 ## 🧠 Embedding Provider Auto-Selection & Session Caching
 
-The system provides flexible vector embedding generations handled through `FreeEmbeddings` (which integrates with LangChain's `Embeddings` class).
+The system provides flexible vector embedding generations handled through `FreeEmbeddings` (which integrates with LangChain's `Embeddings` class). 
 
 When the configuration `embedding_provider` is set to `"auto"`, the system selects and configures the active model automatically based on available API keys:
-
 1. **Gemini API Key Available**: Uses `models/gemini-embedding-001`.
 2. **Hugging Face API Key Available**: Uses the Inference API (`sentence-transformers/all-MiniLM-L6-v2`).
 3. **Local Fallback (Default)**: Falls back to the CPU-based local LangChain `HuggingFaceEmbeddings` pipeline using `all-MiniLM-L6-v2`.
 
 ### 🛡️ active_embedding_provider.txt Cache
-
 To avoid Chroma vector dimension mismatch exceptions (which occur when different model configurations with different vector dimensions are mixed within the same session collection), the system caches the successfully resolved embedding provider name to `sessions/{session_id}/active_embedding_provider.txt`.
-
 - Subsequence indexing or search runs within that session **lock onto** that saved provider to maintain consistent dimensions.
 - If a Chroma DB dimension mismatch error is still caught during similarity search, the retriever automatically deletes the vector collection and calls `SchemaEmbeddingService.build_vector_store` to auto-rebuild the index.
 
@@ -157,9 +174,7 @@ To avoid Chroma vector dimension mismatch exceptions (which occur when different
 ---
 
 ## 🛠️ Security and Sanitization Controls
-
 To prevent SQL injection or deletion of tables on server databases:
-
 1. **SELECT Statement Enforcer**: Any query must start with a `SELECT` statement or a `WITH` statement (allowing Common Table Expressions). Other query actions will trigger immediate failure.
 2. **Forbidden Operations Parser**: The engine searches queries for keywords (`INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, `CREATE`, `TRUNCATE`) using word boundary regular expressions and blocks execution if any are present.
 3. **API Key Masking**: Front-facing APIs dynamically mask all stored secrets (`********`), checking them in only on save.
@@ -169,9 +184,7 @@ To prevent SQL injection or deletion of tables on server databases:
 ## 🚀 Setup and Configuration
 
 ### 1. Environment Configuration
-
 Create a `.env` file in the root folder or the `backend/` directory:
-
 ```env
 # Database Settings
 DB_SERVER=MLS-AI-PC
@@ -187,7 +200,6 @@ OLLAMA_BASE_URL=http://localhost:11434
 ```
 
 ### 2. Backend Installation & Server Launch
-
 1. Open a terminal and navigate to the backend directory:
    ```bash
    cd backend
@@ -213,7 +225,6 @@ OLLAMA_BASE_URL=http://localhost:11434
    ```
 
 ### 3. Frontend Running Instructions
-
 1. Open the project root.
 2. Open `index.html` directly in a browser (or host it locally via a developer tool like VS Code Live Server).
 3. If running a static server, you can boot it via python:
@@ -225,9 +236,7 @@ OLLAMA_BASE_URL=http://localhost:11434
 ---
 
 ## 💡 Important Rules for Database Schema Contexts
-
 The SQL Generator enforces specific domain mappings during SQL generation:
-
 - **Central Lookup Registry**: The table `[ConfigInfoFlat]` acts as the central source of truth for categories (marital status, salutation, blood group, states, cities, etc.).
 - **ID Resolution**: Raw foreign-key IDs (like `salutationID`, `bloodGroup`, `cityID`) are automatically mapped via `LEFT JOIN` on `[ConfigInfoFlat]` to fetch the human-readable text columns (`[itemName]`) instead of raw IDs.
 - **Identifier Quotes**: Generates T-SQL standard identifiers wrapped in square brackets (e.g., `[Table]`).
