@@ -237,6 +237,6 @@ OLLAMA_BASE_URL=http://localhost:11434
 
 ## 💡 Important Rules for Database Schema Contexts
 The SQL Generator enforces specific domain mappings during SQL generation:
-- **Central Lookup Registry**: The table `[ConfigInfoFlat]` acts as the central source of truth for categories (marital status, salutation, blood group, states, cities, etc.).
-- **ID Resolution**: Raw foreign-key IDs (like `salutationID`, `bloodGroup`, `cityID`) are automatically mapped via `LEFT JOIN` on `[ConfigInfoFlat]` to fetch the human-readable text columns (`[itemName]`) instead of raw IDs.
+- **Central Lookup Registry**: The table `Dummy_Info' acts as the central source of truth for categories (marital status, salutation, blood group, states, cities, etc.).
+- **ID Resolution**: Raw foreign-key IDs  are automatically mapped via `LEFT JOIN` on `Dummy_Info` to fetch the human-readable text columns instead of raw IDs.
 - **Identifier Quotes**: Generates T-SQL standard identifiers wrapped in square brackets (e.g., `[Table]`).
