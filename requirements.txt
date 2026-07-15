@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-multipart
+pydantic
+pandas
+openpyxl
+python-dotenv
+sqlalchemy
+chromadb
+langchain
+langchain-community
+langchain-ollama
+sentence-transformers
+sqlparse
+pyodbc

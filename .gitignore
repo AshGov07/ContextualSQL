@@ -1,0 +1,16 @@
+# User requested ignores
+backend/sessions/
+backend/config.json
+.env
+Mediscan_ObOnly_Schema.xlsx
+Results_config_info.csv
+text-to-sql-ai-agent-steps-videos.mp4
+README.md
+readme.md.txt
+git_commands.txt
+
+# Python and environment ignores
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
