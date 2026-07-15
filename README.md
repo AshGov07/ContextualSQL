@@ -2,7 +2,7 @@
 
 ContextualSQL is a production-grade, AI-powered Text-to-SQL Retrieval-Augmented Generation (RAG) agent. It converts natural language queries into Microsoft SQL Server T-SQL, executes queries against the database, dynamically recommends and renders charts, and handles runtime failures using an automatic self-correcting validation loop.
 
-The application features a sleek glassmorphic web interface and a robust FastAPI backend. It is designed to work with complex relational databases, featuring specialized query rules for central category tables like `[ConfigInfoFlat]` mapping raw IDs to human-readable names.
+The application features a sleek glassmorphic web interface and a robust FastAPI backend. It is designed to work with complex relational databases, featuring specialized query rules for central category tables like `Dummy_Info` mapping raw IDs to human-readable names.
 
 ---
 
